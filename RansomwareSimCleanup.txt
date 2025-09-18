@@ -1,0 +1,37 @@
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%               Ransomware Simulation - Restore Files (Recursive) Ducky Script                             %%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DELAY 1000
+GUI r
+DELAY 2000
+STRING powershell
+ENTER
+DELAY 6000
+REM Define the locations
+STRING $folders = @(
+ENTER
+STRING [Environment+SpecialFolder]::Desktop,
+ENTER
+STRING [Environment+SpecialFolder]::MyPictures,
+ENTER
+STRING [Environment+SpecialFolder]::MyMusic
+ENTER
+STRING )
+ENTER
+STRING $folders += [Environment]::GetFolderPath('UserProfile') + '\Downloads'
+ENTER
+DELAY 3000
+REM Iterate over each location and recursively restore .avemujica files
+STRING foreach ($folder in $folders) {
+ENTER
+STRING     if (Test-Path $folder) {
+ENTER
+STRING         Get-ChildItem -Path $folder -File -Recurse | Where-Object { $_.Name.EndsWith('.avemujica') } | ForEach-Object { Rename-Item -Path $_.FullName -NewName ($_.Name -replace '\.avemujica$', '') }
+ENTER
+STRING     }
+ENTER
+STRING }
+ENTER
+DELAY 4000
+STRING exit
+ENTER

